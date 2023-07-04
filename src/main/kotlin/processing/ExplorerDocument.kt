@@ -79,7 +79,7 @@ class ExplorerDocument(
 
     }
 
-    fun ChapterHostIdentity(node: Node) {
+    private fun ChapterHostIdentity(node: Node) {
         doc.apply {
             add(PDFformat.Title("[ IDENTITE ]"))
             val identite = arrayListOf<Pair<String, String>>()
@@ -152,7 +152,7 @@ class ExplorerDocument(
         }
     }
 
-    fun ChapterHardware(host: Host) {
+    private fun ChapterHardware(host: Host) {
         doc.apply {
             add(PDFformat.Title("[ HARDWARE ]"))
             val hw = arrayListOf<Pair<String, String>>()
@@ -169,7 +169,7 @@ class ExplorerDocument(
         }
     }
 
-    fun ChapterNetworkInterface(host: Host) {
+    private fun ChapterNetworkInterface(host: Host) {
         doc.apply {
             val node = host.getNodeInfo()
             add(PDFformat.Title("[ NETWORK_INTERFACE ]",))
@@ -187,7 +187,7 @@ class ExplorerDocument(
         }
     }
 
-    fun ChapterRunningSoftware(host: Host) {
+    private fun ChapterRunningSoftware(host: Host) {
         doc.apply {
             val node = host.getNodeInfo()
             val run = arrayListOf<ArrayList<Pair<String, String>>>()
@@ -205,6 +205,14 @@ class ExplorerDocument(
                 add(PDFformat.createPdfPTable(run))
             }
             newPage()
+        }
+    }
+
+    fun AddChapterNoGraph() {
+        doc.apply {
+            add(PDFformat.Info("(Le programme permettant de générer les graphes n'est pas présent sur cette machine."))
+            add(PDFformat.Info("Si vous souhaitez pouvoir générer les graphes \"Software Connected\" et \"Infrastructure\", veuillez installer : https://graphviz.gitlab.io/download/ ,"))
+            add(PDFformat.Info("et valider son fonctionnement avec \"dot -V\" qui doit vous retourner sa version.)"))
         }
     }
 

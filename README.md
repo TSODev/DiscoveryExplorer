@@ -8,6 +8,19 @@ exemple de ligne de commande: (nécessite un JVM)
 Il s'agit d'un programme en ligne de commande qui permet de créer un fichier pdf représentant le profil d'un Host de BMC Discovery
 
 
+##Attention : 
+Ce programme utilise une application externe pour générer les graphes représentants les relations sur le noeud.
+
+Si vous souhaitez obtenir les graphes , vous devez installer cette extension sur votre poste
+
+https://graphviz.gitlab.io/download/
+
+Le module utilisé est **dot**. 
+
+(Le programme vérifie la présence de l'exécutable avant de générer les graphes). En absence de dot, seules les informations détaillées du noeud sont proposées 
+
+
+##Usage:
 **usage**: [-h] [-v] -s SERVER [-x] -u USERNAME -p PASSWORD [--host] -n NAME [-c]
 
 

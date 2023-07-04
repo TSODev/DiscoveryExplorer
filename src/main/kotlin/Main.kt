@@ -158,31 +158,40 @@ class ParsedArgs(parser: ArgParser) {
 
                             val graphvizSC = Graph(filename = name + "_Software", id = name, label = "Software Connected Graph from $name")
 
-                            var graph = apiGetSoftwareConnectedGraph(server, host.getSource().id, unsafe, verbose)
-                            if (graph != null) {
-                                host.setGraph(graph,graphvizSC)
+                            if (graphvizSC.testDotEnable()) {
+
+                                var graph = apiGetSoftwareConnectedGraph(server, host.getSource().id, unsafe, verbose)
+                                if (graph != null) {
+                                    host.setGraph(graph, graphvizSC)
+                                }
+
+                                graphvizSC.producePNG()
+
+                                val imageSC = Image.getInstance(name + "_Software.png")
+                                imageSC.scaleToFit(900f, 680f)
+
+                                val graphvizINFRA = Graph(
+                                    filename = name + "_Infrastructure",
+                                    id = name,
+                                    label = "Infrastructure Graph from $name"
+                                )
+
+                                graph = apiGetInfrastructureGraph(server, host.getSource().id, unsafe, verbose)
+                                if (graph != null) {
+                                    host.setGraph(graph, graphvizINFRA)
+                                }
+                                graphvizINFRA.producePNG()
+
+                                val imageINFRA = Image.getInstance(name + "_Infrastructure.png")
+                                imageINFRA.scaleToFit(900f, 680f)
+
+                                createDocumentWithGraphForHost(host, imageSC, imageINFRA)
+
+                                if (clean) graphvizSC.clean()
+                                if (clean) graphvizINFRA.clean()
+                            } else {
+                                createDocumentWithoutGraphForHost(host)
                             }
-
-                            graphvizSC.producePNG()
-
-                            val imageSC = Image.getInstance(name + "_Software.png")
-                            imageSC.scaleToFit(900f, 680f)
-
-                            val graphvizINFRA = Graph(filename = name + "_Infrastructure", id = name, label = "Infrastructure Graph from $name")
-
-                            graph = apiGetInfrastructureGraph(server, host.getSource().id, unsafe, verbose)
-                            if (graph != null) {
-                                host.setGraph(graph,graphvizINFRA)
-                            }
-                            graphvizINFRA.producePNG()
-
-                            val imageINFRA = Image.getInstance(name + "_Infrastructure.png")
-                            imageINFRA.scaleToFit(900f, 680f)
-
-                            createDocumentForHost(host, imageSC, imageINFRA)
-
-                            if (clean) graphvizSC.clean()
-                            if (clean) graphvizINFRA.clean()
 
                             logger.info("Et voilà , le fichier $name a été généré")
         //                    pdfWriter.close()
@@ -197,7 +206,22 @@ class ParsedArgs(parser: ArgParser) {
             }
         }
 
-private fun createDocumentForHost(
+private fun createDocumentWithoutGraphForHost(host: Host, ) {
+    val pdfDocument = ExplorerDocument("${host.getNodeInfo().state["name"]}")
+    pdfDocument.setMetaData(
+        "Discovery Extractor PDF result",
+        "provide discovered information on node",
+        "Kotlin, OpenPDF, graphviz",
+        "Orange Business",
+        "Thierry Soulie"
+    )
+    pdfDocument.setTitle(host.getNodeInfo().state["name"].toString())
+    pdfDocument.setBook(KindType.HOST, host)
+    pdfDocument.AddChapterNoGraph()
+    pdfDocument.close()
+}
+
+private fun createDocumentWithGraphForHost(
     host: Host,
     imageSC: Image,
     imageINFRA: Image
@@ -215,8 +239,8 @@ private fun createDocumentForHost(
     pdfDocument.PageGraph(imageSC, "[ SOFTWARE CONTEXT ]")
     pdfDocument.PageGraph(imageINFRA, "[ INFRASTRUCTURE CONTEXT ]")
     pdfDocument.close()
-
 }
+
 
 private fun getToken(server: String,username: String, password: String, unsafe: Boolean) : String? {
         var token: String? = null

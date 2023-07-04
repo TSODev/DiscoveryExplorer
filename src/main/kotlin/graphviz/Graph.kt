@@ -178,6 +178,23 @@ class Graph (
         printWriter.close()
     }
 
+    fun testDotEnable(): Boolean {
+        var exist = false
+        try {
+            val result = ProcessBuilder("dot", "-V")
+        //        .redirectOutput(File(pngFileName))
+                .redirectError(ProcessBuilder.Redirect.INHERIT)
+                .start()
+                .waitFor()
+                exist = true
+        }
+        catch (e: Exception) {
+            logger.error("Erreur :  ${e.message}")
+        }
+        return exist
+
+    }
+
     fun producePNG() {
         val gvFileName = "$filename.gv"
         val pngFileName = "$filename.png"
@@ -191,7 +208,7 @@ class Graph (
  //           println("dot has been processed")
         }
         catch (e: Exception) {
-            println("Erreur :  ${e.message}")
+            logger.error("Erreur :  ${e.message}")
         }
 
 

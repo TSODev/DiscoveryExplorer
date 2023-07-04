@@ -60,6 +60,23 @@ class PDFformat() {
             return p
         }
 
+        fun Info(note: String): Paragraph {
+            var chunk: Chunk = Chunk(
+                note,
+                FontFactory.getFont(FontFactory.HELVETICA, 8f, Font.ITALIC, Color.BLACK)
+            ).apply {
+//                setBackground(Color.LIGHT_GRAY)
+            }
+
+            val p= Paragraph(chunk).apply {
+                alignment = Element.ALIGN_LEFT
+                spacingAfter = 2f
+                spacingBefore = 2f
+            }
+
+            return p
+        }
+
         fun SingleLeftAndSingleRight(left: String, right: String): Table {
 
 
