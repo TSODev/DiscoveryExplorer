@@ -1,35 +1,45 @@
-# DiscoveryExtractor
+# DiscoveryExplorer
 
 
+exemple de ligne de commande: (nécessite un JVM)
 
-Il s'agit d'un programme en ligne de commande qui permet de créer un fichier de données au format CSV à partir d'une commande de recherche exécutée sur un serveur BMC Discovery
+**./DiscoveryExplorer -s "https://serveur/api/v1.9/" -u *username* -p *password* --host -n *nomdunoeud*  -xvc**
+
+Il s'agit d'un programme en ligne de commande qui permet de créer un fichier pdf représentant le profil d'un Host de BMC Discovery
 
 
-**usage**: [-h] [-v] -s SERVER -u USERNAME -p PASSWORD [-q QUERY] [-o OUTPUT]
+**usage**: [-h] [-v] -s SERVER [-x] -u USERNAME -p PASSWORD [--host] -n NAME [-c]
 
+
+Discovery Explorer :
 
 
 required arguments:
 
-  **-s SERVER**, **--server SERVER**  : 
-  URL API du serveur Discovery , (https et termine avec '/') généralement https://server/api/v1.1/
+**-s SERVER**, **--server SERVER**   :         URL API du serveur Discovery , (https et termine avec
+      '/') généralement https://server/api/v1.4/
 
-  **-u USERNAME**,**--username USERNAME**  :
-  Login - Nom de l'utilisateur
+**-u USERNAME**, **--username USERNAME**   :     Login - Nom de l'utilisateur
 
-  **-p PASSWORD**,**--password PASSWORD**  :
-  Login - Mot de passe
+
+**-p PASSWORD**, **--password PASSWORD**   :      Login - Mot de passe
+
+
+**-n NAME**, **--name NAME** :  nom du noeud
+
+*le nom du fichier généré est le nom du noeud (.pdf ; . gv ; -png)*
 
 
 optional arguments:
 
-  -h, --help       :     show this help message and exit
 
-  -v, --verbose    :     valide le mode verbeux
+-h, --help :           affiche ce message d'aide
 
-  **-q QUERY**,**--query QUERY**  :
-  requete sur le serveur (par défaut : *search Host*)
+-v, --verbose :        valide le mode verbeux
 
-  **-o OUTPUT**,**--output OUTPUT**  :   
-  Chemin complet du fichier resultat (par défaut : *DiscoveryExtractedData.csv*)
+-x, --unsecure :       ne vérifie pas le certificat SSL (utile avec des certificats auto signés)
 
+--host, --softwareinstance :              Type de noeud (kind) (par défaut : --host)
+
+
+-c, --clean :          efface les fichiers intermédiaires (.gv ; .png)
